@@ -3,10 +3,10 @@
 
 jiraBaseUrl_sky ='https://www.abc.com/jira/rest/api/'
 jiraRestVersion = 'latest'
-jiraUrl=jiraBaseUrl_sky + jiraRestVersion
+jiraUrl=jiraBaseUrl + jiraRestVersion
 startAt=0
 maxResults=1000
-FirstJira='NGDEV-2'
+FirstJira='JRA-2'
 
 
 
