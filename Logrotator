@@ -1,0 +1,54 @@
+'''
+Created on Oct 9, 2017
+
+@author: LSX1KOR
+'''
+
+import os
+
+filename = 'test1.log'
+data_MB=1024*1024
+#get the size of the file
+if os.path.exists(filename):
+    statinfo = os.stat(filename)
+    size = statinfo.st_size
+    print size
+    if size>20:
+        file_obj = open(filename, 'r')
+        start_index = (size/20)*20 # it will be like (63/20)*20=60
+        end_index = size
+
+        file_num = int(size / 20)
+        if file_num>5:
+            file_num=5
+        print(file_num)
+        num = file_num
+
+        for i in range(file_num + 1):
+            if i == 0:
+                temp_filename = filename
+            else:
+                temp_filename = filename.split('.')[0] + '_' + str(num) + '.log'
+
+            #num = num - 1
+
+            with open(temp_filename, 'w') as fobj:
+                #First read from file and then write to another file
+                print end_index,start_index
+                file_obj.seek(end_index - start_index)
+                read_data = file_obj.read(end_index - start_index)
+                print "This is "+read_data
+                fobj.write(read_data)
+
+            end_index=start_index-1
+            if (start_index - 20) < 0:
+                break
+            else:
+                start_index = start_index - 20
+
+
+        file_obj.close()
+    else:
+        pass
+else:
+    print ("No file is persent with the name " +filename)
