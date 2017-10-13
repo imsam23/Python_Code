@@ -1,54 +1,49 @@
 '''
-Created on Oct 9, 2017
+Created on Oct 12, 2017
 
 @author: LSX1KOR
 '''
 
 import os
+import sys
 
-filename = 'test1.log'
+filename = 'catalina.out'
 data_MB=1024*1024
-#get the size of the file
+size_index=20
+count=1
+file_num=2
+
 if os.path.exists(filename):
     statinfo = os.stat(filename)
     size = statinfo.st_size
-    print size
     if size>20:
-        file_obj = open(filename, 'r')
-        start_index = (size/20)*20 # it will be like (63/20)*20=60
-        end_index = size
+        try:
+            fr = open(filename, 'r')
+        except Exception as e:
+            print "file is not opening with the error because " +str(e)
+            fr.close()
+            sys.exit(1)
 
-        file_num = int(size / 20)
-        if file_num>5:
-            file_num=5
-        print(file_num)
-        num = file_num
-
-        for i in range(file_num + 1):
-            if i == 0:
-                temp_filename = filename
+        data_size=size-(size%20)
+        for i in range(file_num):
+            if i==1:
+                temp_file = filename
             else:
-                temp_filename = filename.split('.')[0] + '_' + str(num) + '.log'
+                temp_file = filename+ '.' + str(count)
 
-            #num = num - 1
+            data = fr.read(data_size)
 
-            with open(temp_filename, 'w') as fobj:
-                #First read from file and then write to another file
-                print end_index,start_index
-                file_obj.seek(end_index - start_index)
-                read_data = file_obj.read(end_index - start_index)
-                print "This is "+read_data
-                fobj.write(read_data)
-
-            end_index=start_index-1
-            if (start_index - 20) < 0:
-                break
-            else:
-                start_index = start_index - 20
+            try:
+                with open(temp_file, 'w') as fobj:
+                    fobj.write(data)
+            except Exception as e:
+                print "Exception occured due to " +str(e)
+                fobj.close()
+                sys.exit(1)
 
 
-        file_obj.close()
+        fr.close()
     else:
-        pass
+        print "Data is less than 20 MB"
 else:
-    print ("No file is persent with the name " +filename)
+    print "File does not exist anymore"
